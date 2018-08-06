@@ -1,0 +1,43 @@
+{
+  "name": "@bigtest/cli",
+  "description": "Command line interface for testing big",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist",
+  "files": [
+    "dist",
+    "docs",
+    "src"
+  ],
+  "scripts": {
+    "build": "babel --out-dir ./dist ./src",
+    "docs": "bigtest-docs",
+    "lint": "eslint --ignore-path .gitignore ./",
+    "postpublish": "bigtest-tag-version",
+    "test": "mocha --opts ./tests/mocha.opts ./tests"
+  },
+  "bin": {
+    "bigtest": "./index.js"
+  },
+  "dependencies": {
+    "yargs": "^12.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.0",
+    "@babel/core": "^7.0.0-beta.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.0",
+    "@babel/polyfill": "^7.0.0-beta.0",
+    "@babel/preset-env": "^7.0.0-beta.0",
+    "@babel/register": "^7.0.0-beta.0",
+    "@bigtest/meta": "bigtestjs/meta#v0.0.1",
+    "babel-eslint": "^9.0.0-beta.0",
+    "chai": "^4.1.2",
+    "eslint": "^5.1.0",
+    "eslint-config-standard": "^12.0.0-alpha.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "mocha": "^5.2.0"
+  }
+}
