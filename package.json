@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "build": "babel --out-dir ./dist ./src",
+    "watch": "nodemon --watch ./src --exec 'yarn build'",
     "docs": "bigtest-docs",
     "lint": "eslint --ignore-path .gitignore ./",
     "postpublish": "bigtest-tag-version",
@@ -20,6 +21,7 @@
     "bigtest": "./index.js"
   },
   "dependencies": {
+    "fs-extra": "^7.0.0",
     "yargs": "^12.0.1"
   },
   "devDependencies": {
