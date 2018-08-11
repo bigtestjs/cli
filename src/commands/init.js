@@ -55,7 +55,7 @@ export async function handler(argv) {
   let isCreatingNetwork = !networkDirExists && network;
 
   if (bigtestDirExists && !isCreatingNetwork) {
-    console.log(`\nLooks like BigTest is already initialized\n`);
+    console.info(`\nLooks like BigTest is already initialized\n`);
 
     return;
   }
@@ -63,7 +63,7 @@ export async function handler(argv) {
   if (bigtestDirExists && isCreatingNetwork) {
     await copyNetwork(appFramework);
 
-    console.log('\n@bigtest/network has been initialized\n');
+    console.info('\n@bigtest/network has been initialized\n');
 
     return;
   }
@@ -72,7 +72,7 @@ export async function handler(argv) {
     await copyWithFramework(appFramework, network).then(({ needsNetwork }) => {
       let networkMessage = needsNetwork ? 'and @bigtest/mirage' : '';
 
-      console.log(
+      console.info(
         `\nBigTest has been initialized with @bigtest/${appFramework} ${networkMessage}\n`
       );
     });
