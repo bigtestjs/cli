@@ -1,10 +1,10 @@
-import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
-import { setupApplicationForTesting } from '../helpers/setupAppForTesting';
+import { beforeEach, describe, it } from '@bigtest/mocha';
+import { setupApplicationForTesting } from '../helpers/setup-app';
 
 import AppInteractor from '../interactors/app.js';
 
-describe('iTunes app test', () => {
+describe('TodoMVC BigTest example', () => {
   let TodoApp = new AppInteractor();
 
   beforeEach(() => {

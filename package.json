@@ -13,7 +13,7 @@
     "build": "babel --out-dir ./dist ./src",
     "watch": "nodemon --watch ./src --exec 'yarn build'",
     "docs": "bigtest-docs",
-    "lint": "eslint --ignore-path .gitignore ./",
+    "lint": "eslint ./",
     "postpublish": "bigtest-tag-version",
     "test": "mocha --opts ./tests/mocha.opts ./tests"
   },

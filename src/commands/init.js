@@ -6,30 +6,31 @@ const BIGTEST_DIR = `${CWD}/bigtest`;
 let CLI_TEMPLATE_DIR = join(__dirname, '../../templates');
 let pathExists = path => existsSync(path);
 
-let copyWithFramework = (framework, needsNetwork) => {
-  let bigtestTemplateDir = needsNetwork ? 'bigtest-network' : 'bigtest';
+let copyWithFramework = async (framework, needsNetwork) => {
+  await copy(`${CLI_TEMPLATE_DIR}/bigtest`, `${CWD}/bigtest`);
+  await copy(
+    `${CLI_TEMPLATE_DIR}/helpers/${framework}`,
+    `${CWD}/bigtest/helpers`
+  );
 
-  return copy(
-    `${CLI_TEMPLATE_DIR}/${bigtestTemplateDir}`,
-    `${CWD}/bigtest`
-  ).then(() => {
-    return copy(
-      `${CLI_TEMPLATE_DIR}/helpers/${framework}`,
-      `${CWD}/bigtest/helpers`
-    );
-  });
+  if (needsNetwork) {
+    await copy(`${CLI_TEMPLATE_DIR}/network`, `${CWD}/bigtest/network`);
+  }
+
+  return { needsNetwork };
 };
 
 export function builder(yargs) {
   yargs.option('network', {
     group: 'Options:',
-    description: 'Generate @bigtest/network files',
+    description:
+      'Generate @bigtest/mirage files for mocking the applications network',
     type: 'boolean',
     default: false
   });
   yargs.option('app-framework', {
     group: 'Options:',
-    description: 'Generate @bigtest/react helper file',
+    description: 'Generate the BigTest framework-specific test helper file',
     type: 'string',
     default: 'react'
   });
@@ -42,27 +43,24 @@ export async function handler(argv) {
   let isCreatingNetwork = !networkDirExists && network;
 
   if (bigtestDirExists && !isCreatingNetwork) {
-    console.log(
-      `\nLooks like BigTest is already initialized with @bigtest/${appFramework}\n`
-    );
+    console.log(`\nLooks like BigTest is already initialized\n`);
 
     return;
   }
 
   if (bigtestDirExists && isCreatingNetwork) {
-    return copy(
-      `${CLI_TEMPLATE_DIR}/bigtest-network/network`,
-      `${CWD}/bigtest/network`
-    ).then(() => {
-      console.log('\n@bigtest/network has been initialized\n');
+    await copy(`${CLI_TEMPLATE_DIR}/network`, `${CWD}/bigtest/network`);
 
-      return;
-    });
+    console.log('\n@bigtest/network has been initialized\n');
+
+    return;
   }
 
-  copyWithFramework(appFramework, network).then(() => {
+  copyWithFramework(appFramework, network).then(({ needsNetwork }) => {
+    let networkMessage = needsNetwork ? 'and @bigtest/mirage' : '';
+
     console.log(
-      `\nBigTest has been initialized with @bigtest/${appFramework}\n`
+      `\nBigTest has been initialized with @bigtest/${appFramework} ${networkMessage}\n`
     );
   });
 }
