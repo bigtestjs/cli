@@ -1,5 +1,6 @@
 import { copy, existsSync } from 'fs-extra';
 import { join } from 'path';
+import cleanupFiles from '../utils/clean-up-files';
 
 const CWD = process.cwd();
 const BIGTEST_DIR = `${CWD}/bigtest`;
@@ -67,11 +68,16 @@ export async function handler(argv) {
     return;
   }
 
-  copyWithFramework(appFramework, network).then(({ needsNetwork }) => {
-    let networkMessage = needsNetwork ? 'and @bigtest/mirage' : '';
+  try {
+    await copyWithFramework(appFramework, network).then(({ needsNetwork }) => {
+      let networkMessage = needsNetwork ? 'and @bigtest/mirage' : '';
 
-    console.log(
-      `\nBigTest has been initialized with @bigtest/${appFramework} ${networkMessage}\n`
-    );
-  });
+      console.log(
+        `\nBigTest has been initialized with @bigtest/${appFramework} ${networkMessage}\n`
+      );
+    });
+  } catch (error) {
+    console.log(`Initialize failed :( \n${error}`);
+    await cleanupFiles('bigtest', CWD);
+  }
 }
