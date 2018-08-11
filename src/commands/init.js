@@ -6,6 +6,16 @@ const BIGTEST_DIR = `${CWD}/bigtest`;
 let CLI_TEMPLATE_DIR = join(__dirname, '../../templates');
 let pathExists = path => existsSync(path);
 
+let copyNetwork = async framework => {
+  await copy(`${CLI_TEMPLATE_DIR}/network`, `${CWD}/bigtest/network`);
+  await copy(
+    `${CLI_TEMPLATE_DIR}/helpers/${framework}-network`,
+    `${CWD}/bigtest/helpers`
+  );
+
+  return true;
+};
+
 let copyWithFramework = async (framework, needsNetwork) => {
   await copy(`${CLI_TEMPLATE_DIR}/bigtest`, `${CWD}/bigtest`);
   await copy(
@@ -14,7 +24,7 @@ let copyWithFramework = async (framework, needsNetwork) => {
   );
 
   if (needsNetwork) {
-    await copy(`${CLI_TEMPLATE_DIR}/network`, `${CWD}/bigtest/network`);
+    await copyNetwork(framework);
   }
 
   return { needsNetwork };
@@ -28,6 +38,7 @@ export function builder(yargs) {
     type: 'boolean',
     default: false
   });
+
   yargs.option('app-framework', {
     group: 'Options:',
     description: 'Generate the BigTest framework-specific test helper file',
@@ -49,7 +60,7 @@ export async function handler(argv) {
   }
 
   if (bigtestDirExists && isCreatingNetwork) {
-    await copy(`${CLI_TEMPLATE_DIR}/network`, `${CWD}/bigtest/network`);
+    await copyNetwork(appFramework);
 
     console.log('\n@bigtest/network has been initialized\n');
 
