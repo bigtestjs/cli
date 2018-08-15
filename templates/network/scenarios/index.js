@@ -3,3 +3,4 @@
 
 // For example:
 // export { default as Post } from './post';
+export { default } from './default';

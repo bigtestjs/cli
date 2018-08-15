@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { beforeEach, describe, it } from '@bigtest/mocha';
 import { setupApplicationForTesting } from '../helpers/setup-app';
+import { when } from '@bigtest/convergence';
 
 import AppInteractor from '../interactors/app.js';
 
@@ -11,15 +12,19 @@ describe('TodoMVC BigTest example', () => {
     await setupApplicationForTesting();
   });
 
+  it('has ten todos to start with', () => {
+    expect(TodoApp.todoCount).to.equal(10);
+  });
+
   describe('update BigTest install progress', () => {
     beforeEach(async () => {
       let completed = new Array(6).fill(null);
 
-      completed.forEach(async (item, index) => {
-        await TodoApp.todoList(index).toggle();
-      });
+      for (let index in completed) {
+        await TodoApp.todoList(parseInt(index, 10)).toggle();
+      }
 
-      await TodoApp.clickFilter('Active');
+      await TodoApp.clickActiveFilter();
     });
 
     it('has four todos left', () => {
@@ -32,10 +37,12 @@ describe('TodoMVC BigTest example', () => {
 
     describe('adding the final todos with a typo', () => {
       beforeEach(async () => {
-        await TodoApp.fillTodo('Fill in your interactor')
-          .submitTodo()
-          .fillTodo('rite tests')
-          .submitTodo();
+        await TodoApp.fillTodo('Fill in your interactor').submitTodo();
+        // Interactors are _super_ fast. Users can't add two todos in
+        // 20ms, so lets try to act like a user here and wait for a
+        // todo to be added before adding the next
+        await when(() => TodoApp.todoList().length === 5);
+        await TodoApp.fillTodo('rite tests').submitTodo();
       });
 
       it('increases the todo count', () => {
@@ -52,9 +59,10 @@ describe('TodoMVC BigTest example', () => {
       describe('fixing the typo', () => {
         beforeEach(async () => {
           await TodoApp.todoList(5)
-            .only()
             .doubleClick()
+            .todoList(5)
             .fillInput('Write tests')
+            .todoList(5)
             .pressEnter();
         });
 
@@ -64,7 +72,7 @@ describe('TodoMVC BigTest example', () => {
 
         describe('viewing all Todos', () => {
           beforeEach(async () => {
-            await TodoApp.clickFilter('All');
+            await TodoApp.clickAllFilter();
           });
 
           it('selects the right filter', () => {

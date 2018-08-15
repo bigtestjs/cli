@@ -2,4 +2,4 @@
 // export it in this index
 
 // For example:
-// export { default as Post } from './post';
+// export { default as post } from './post';

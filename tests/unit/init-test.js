@@ -86,9 +86,7 @@ describe('bigtest init', () => {
           "import { setupAppForTesting } from '@bigtest/react';"
         )
       ).to.equal(true);
-      expect(helperFile.includes('this.server = startMirage();')).to.equal(
-        true
-      );
+      expect(helperFile.includes('server = startMirage();')).to.equal(true);
     });
   });
 
