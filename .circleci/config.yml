@@ -46,9 +46,9 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run:
-          name: Build documentation
-          command: yarn docs
+      # - run:
+      #     name: Build documentation
+      #     command: yarn docs
       - run:
           name: Build package
           command: yarn build
@@ -56,7 +56,7 @@ jobs:
           root: ~/
           paths:
             - cli/dist
-            - cli/docs
+            # - cli/docs
 
   test:
     <<: *defaults
