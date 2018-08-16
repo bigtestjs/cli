@@ -13,7 +13,6 @@
     "build": "yarn build:cli && yarn build:assets",
     "build:cli": "babel --out-dir ./dist ./lib --verbose",
     "build:assets": "webpack --config webpack.config.js",
-    "docs": "bigtest-docs",
     "lint": "eslint --ignore-path .gitignore ./",
     "postpublish": "bigtest-tag-version",
     "start": "nodemon --watch ./lib --exec 'yarn build'",
