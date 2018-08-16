@@ -28,6 +28,7 @@
     "express-mung": "^0.5.1",
     "http-proxy-middleware": "^0.18.0",
     "loglevelnext": "^2.0.1",
+    "microstates": "^0.10.1",
     "rimraf": "^2.6.2",
     "ws": "^6.0.0",
     "x-default-browser": "^0.4.0",
