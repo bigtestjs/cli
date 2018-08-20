@@ -1,5 +1,10 @@
 #! /usr/bin/env node
 
+require('yargonaut')
+  .style('blue')
+  .helpStyle('green.bold')
+  .errorsStyle('red.bold');
+
 require('yargs')
   .scriptName('bigtest')
   .version(require('./package.json').version)
