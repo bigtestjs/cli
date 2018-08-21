@@ -82,7 +82,7 @@ describe('Process', () => {
 
     it('rejects when the command exits with a non-zero code', async () => {
       let test = new Process({ cmd: 'printf', args: ['%'] });
-      await expect(test.run()).to.be.rejectedWith('printf exited with code 1');
+      await expect(test.run()).to.be.rejectedWith('printf failed with exit code 1');
     });
 
     it('rejects when the command does not exist', async () => {
