@@ -7,7 +7,7 @@ chai.use(chaiAsPromised);
 
 export { expect } from 'chai';
 export { when } from '@bigtest/convergence';
-export * from '../../lib/run/util/common';
+export * from '../../lib/util/fs';
 export * from '../../lib/run/util/network';
 
 export function defer() {
