@@ -4,8 +4,8 @@ import WebSocket from 'ws';
 
 import { expect } from '../helpers';
 
-import WebServer from '../../../lib/run/server';
-import SocketServer from '../../../lib/run/sockets';
+import WebServer from '../../../lib/run/servers/web';
+import SocketServer from '../../../lib/run/servers/sockets';
 
 describe('SocketServer', () => {
   let test, server;

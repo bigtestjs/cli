@@ -1,8 +1,8 @@
 import { describe, beforeEach, afterEach, it } from 'mocha';
 import { expect, request } from '../helpers';
 
-import WebServer from '../../../lib/run/server';
-import ProxyServer from '../../../lib/run/proxy';
+import WebServer from '../../../lib/run/servers/web';
+import ProxyServer from '../../../lib/run/servers/proxy';
 
 describe('ProxyServer', function() {
   let test;
