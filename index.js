@@ -9,6 +9,7 @@ require('yargonaut')
   .style('blue', [
     'aliases:',
     'default:',
+    'array',
     'boolean',
     'number',
     'string'
@@ -16,9 +17,10 @@ require('yargonaut')
   .style('green.bold', [
     'Commands:',
     'Options:',
+    'Serve Options:',
+    'Adapter Options:',
     'Client Options:',
-    'Proxy Options:',
-    'Adapter Options:'
+    'Proxy Options:'
   ]);
 
 require('yargs')
