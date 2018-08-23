@@ -3,7 +3,7 @@ import { expect, request } from '../helpers';
 
 import WebServer from '../../../lib/run/servers/web';
 
-describe('WebServer', () => {
+describe('Unit: WebServer', () => {
   let test;
 
   beforeEach(() => {

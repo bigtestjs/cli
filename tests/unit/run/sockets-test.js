@@ -7,7 +7,7 @@ import { expect } from '../helpers';
 import WebServer from '../../../lib/run/servers/web';
 import SocketServer from '../../../lib/run/servers/sockets';
 
-describe('SocketServer', () => {
+describe('Unit: SocketServer', () => {
   let test, server;
   let sockets = [];
 

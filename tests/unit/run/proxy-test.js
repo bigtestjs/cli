@@ -4,7 +4,7 @@ import { expect, request } from '../helpers';
 import WebServer from '../../../lib/run/servers/web';
 import ProxyServer from '../../../lib/run/servers/proxy';
 
-describe('ProxyServer', function() {
+describe('Unit: ProxyServer', function() {
   let test;
 
   beforeEach(async () => {

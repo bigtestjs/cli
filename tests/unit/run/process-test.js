@@ -4,7 +4,7 @@ import { expect, when } from '../helpers';
 
 import Process from '../../../lib/run/process';
 
-describe('Process', () => {
+describe('Unit: Process', () => {
   it('can be created with specific properties', () => {
     let test = new Process({
       name: 'test',

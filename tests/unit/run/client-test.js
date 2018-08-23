@@ -4,7 +4,7 @@ import { expect, request } from '../helpers';
 import WebServer from '../../../lib/run/servers/web';
 import ClientServer from '../../../lib/run/servers/client';
 
-describe('ClientServer', () => {
+describe('Unit: ClientServer', () => {
   let test;
 
   beforeEach(async () => {

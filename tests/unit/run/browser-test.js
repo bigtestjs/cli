@@ -6,7 +6,7 @@ import { expect, readFile, when, defer } from '../helpers';
 import Process from '../../../lib/run/process';
 import Browser from '../../../lib/run/browsers/base';
 
-describe('Browsers', () => {
+describe('Unit: Browsers', () => {
   let test;
 
   class TestBrowser extends Browser {
