@@ -27,107 +27,117 @@ describe('ProxyServer', function() {
       .have.property('statusCode', 200);
   });
 
-  it('serves options at `/__bigtest__/`', async () => {
-    test.options = { testing: true };
-
+  it('404s for all `/__bigtest__/` endpoints', async () => {
     await expect(request(`${test.url}/__bigtest__/`)).to.eventually
-      .have.property('body', '{"testing":true}');
+      .have.property('statusCode', 404);
+    await expect(request(`${test.url}/__bigtest__/foobar`)).to.eventually
+      .have.property('statusCode', 404);
   });
 
-  it('can inject javascripts and other html into requests', async () => {
-    test.inject('head', 'head.js');
-    test.inject('body', { innerContent: 'let test = true' });
-    test.inject('body', { tagName: 'div', innerContent: 'hello' });
+  it('serves files from the `/__bigtest__/` endpoint', async () => {
+    test.serve('/foobar', __filename);
 
-    let { body } = await request(test.url);
-
-    /* eslint-disable indent */
-    expect(body).to.equal([
-      '<html>',
-        '<head>',
-          '<script src="head.js"></script>',
-        '</head>',
-        '<body>',
-          '<script>let test = true</script>',
-          '<div>hello</div>',
-        '</body>',
-      '</html>'
-    ].join(''));
-    /* eslint-enable indent */
-  });
-
-  it('replaces <server> when the client option is provided', async () => {
-    let client = 'http://localhost:1234';
-
-    test.options = { client };
-    test.inject('head', '<server>/script.js');
-
-    let { body } = await request(test.url);
-    expect(body).to.include(`<script src="${client}/script.js"></script>`);
-    await test.stop();
+    await expect(request(`${test.url}/__bigtest__/foobar`)).to.eventually
+      .have.property('statusCode', 200);
   });
 
   describe('with a target', async () => {
-    let app;
+    let server;
 
     beforeEach(async () => {
-      test.stop();
+      server = new WebServer({ port: 8000 });
 
-      app = new WebServer({ port: 8000 });
-      app.app.get('/', (req, res) => res.send([
+      server.app.get('/', (req, res) => res.send([
         '<html>',
         '<head></head>',
         '<body>PROXIED</body>',
         '</html>'
       ].join('')));
 
-      test = new ProxyServer({
-        target: app.url
-      });
+      await server.start();
 
-      await Promise.all([
-        app.start(),
-        test.start()
-      ]);
+      test.set(server.url);
     });
 
     afterEach(async () => {
-      await Promise.all([
-        app.stop(),
-        test.stop()
-      ]);
+      await server.stop();
     });
 
     it('proxies to the app server', async () => {
       await expect(request(test.url)).to.eventually
         .have.property('body').that.includes('PROXIED');
     });
+  });
 
-    it('can inject javascripts and other html into requests', async () => {
-      test.options.client = 'http://localhost:2222';
+  describe('injecting scripts', () => {
+    async function fetchTestHTML() {
+      let { body: content } = await request(test.url);
+      let [ head, body ] = content.split('</head><body>');
+      head = head.replace(/^.*(<head>)/, '');
+      body = body.replace(/<\/body>.*$/, '');
+      return { head, body };
+    }
 
-      test.inject('head', 'head.js');
-      test.inject('head', '<server>/script.js');
-      test.inject('body', { innerContent: 'let test = true' });
+    it('injects a script tag when given a string', async () => {
+      test.inject('head', '/head.js');
+      test.inject('body', '/body.js');
+
+      let { head, body } = await fetchTestHTML();
+      expect(head).to.include('<script src="/head.js"></script>');
+      expect(body).to.include('<script src="/body.js"></script>');
+    });
+
+    it('injects a script tag when given the script or src option', async () => {
+      test.inject('head', { script: '/head.js' });
+      test.inject('body', { script: true, innerContent: 'let body = true;' });
+      test.inject('body', { src: '/src.js' });
+
+      let { head, body } = await fetchTestHTML();
+      expect(head).to.include('<script src="/head.js"></script>');
+      expect(body).to.include('<script>let body = true;</script>');
+      expect(body).to.include('<script src="/src.js"></script>');
+    });
+
+    it('can inject other HTML elements', async () => {
+      test.inject('head', { tagName: 'link', href: '/style.css', rel: 'stylesheet' });
       test.inject('body', { tagName: 'div', innerContent: 'hello' });
 
-      let { body } = await request(test.url);
+      let { head, body } = await fetchTestHTML();
+      expect(head).to.include('<link href="/style.css" rel="stylesheet"/>');
+      expect(body).to.include('<div>hello</div>');
+    });
 
-      /* eslint-disable indent */
-      expect(body).to.equal([
-        '<html>',
-          '<head>',
-            '<script src="head.js"></script>',
-            '<script src="http://localhost:2222/script.js"></script>',
-          '</head>',
-          '<body>',
-            'PROXIED',
-            '<script>let test = true</script>',
-            '<div>hello</div>',
-          '</body>',
-        '</html>'
-      ].join(''));
-      /* eslint-enable indent */
+    it('can bulk inject with a hash of locations and array of options', async () => {
+      test.inject({
+        head: [
+          { script: '/head.js' },
+          { script: true, innerContent: 'foobar' }
+        ],
+        body: [
+          { tagName: 'div', id: 'root', innerContent: '' },
+          { script: '/body.js' }
+        ]
+      });
+
+      let { head, body } = await fetchTestHTML();
+      expect(head).to.include('<script src="/head.js"></script>');
+      expect(head).to.include('<script>foobar</script>');
+      expect(body).to.include('<div id="root"></div>');
+      expect(body).to.include('<script src="/body.js"></script>');
+    });
+
+    it('can serve a module given the serve option', async () => {
+      test.inject('head', { serve: 'mocha/mocha.js' });
+      test.inject('body', { script: '/served.js', serve: __filename });
+
+      let { head, body } = await fetchTestHTML();
+      expect(head).to.include('<script src="/__bigtest__/mocha/mocha.js"></script>');
+      expect(body).to.include('<script src="/__bigtest__/served.js"></script>');
+
+      await expect(request(`${test.url}/__bigtest__/mocha/mocha.js`))
+        .to.eventually.have.property('statusCode', 200);
+      await expect(request(`${test.url}/__bigtest__/served.js`))
+        .to.eventually.have.property('statusCode', 200);
     });
   });
 });
