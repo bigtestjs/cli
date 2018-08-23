@@ -1,8 +1,8 @@
 import { describe, beforeEach, afterEach, it } from 'mocha';
-import { expect, request } from '../helpers';
+import { expect, request } from '../../helpers';
 
-import WebServer from '../../../lib/run/servers/web';
-import ProxyServer from '../../../lib/run/servers/proxy';
+import WebServer from '@run/servers/web';
+import ProxyServer from '@run/servers/proxy';
 
 describe('Unit: ProxyServer', function() {
   let test;
@@ -27,14 +27,14 @@ describe('Unit: ProxyServer', function() {
       .have.property('statusCode', 200);
   });
 
-  it('404s for all `/__bigtest__/` endpoints', async () => {
+  it('404s for all `__bigtest__` endpoints', async () => {
     await expect(request(`${test.url}/__bigtest__/`)).to.eventually
       .have.property('statusCode', 404);
     await expect(request(`${test.url}/__bigtest__/foobar`)).to.eventually
       .have.property('statusCode', 404);
   });
 
-  it('serves files from the `/__bigtest__/` endpoint', async () => {
+  it('serves files from the `__bigtest__` endpoint', async () => {
     test.serve('/foobar', __filename);
 
     await expect(request(`${test.url}/__bigtest__/foobar`)).to.eventually

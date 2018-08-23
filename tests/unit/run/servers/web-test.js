@@ -1,7 +1,7 @@
 import { describe, beforeEach, afterEach, it } from 'mocha';
-import { expect, request } from '../helpers';
+import { expect, request } from '../../helpers';
 
-import WebServer from '../../../lib/run/servers/web';
+import WebServer from '@run/servers/web';
 
 describe('Unit: WebServer', () => {
   let test;

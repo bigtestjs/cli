@@ -2,10 +2,10 @@ import { describe, beforeEach, afterEach, it } from 'mocha';
 import { when } from '@bigtest/convergence';
 import WebSocket from 'ws';
 
-import { expect } from '../helpers';
+import { expect } from '../../helpers';
 
-import WebServer from '../../../lib/run/servers/web';
-import SocketServer from '../../../lib/run/servers/sockets';
+import WebServer from '@run/servers/web';
+import SocketServer from '@run/servers/sockets';
 
 describe('Unit: SocketServer', () => {
   let test, server;

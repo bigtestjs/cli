@@ -8,7 +8,14 @@
   ],
   "plugins": [
     "@babel/proposal-class-properties",
-    "@babel/proposal-throw-expressions"
+    "@babel/proposal-throw-expressions",
+    ["module-resolver", {
+      "alias": {
+        "@init": "./lib/init",
+        "@run": "./lib/run",
+        "@util": "./lib/util"
+      }
+    }]
   ],
   "ignore": [
     "lib/run/client",

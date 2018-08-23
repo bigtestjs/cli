@@ -3,8 +3,8 @@ import path from 'path';
 import { describe, beforeEach, it } from 'mocha';
 import { expect, readFile, when, defer } from '../helpers';
 
-import Process from '../../../lib/run/process';
-import Browser from '../../../lib/run/browsers/base';
+import Process from '@run/process';
+import Browser from '@run/browsers/base';
 
 describe('Unit: Browsers', () => {
   let test;
