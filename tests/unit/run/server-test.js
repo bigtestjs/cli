@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'mocha';
-import { expect } from '../helpers';
+import { expect, request } from '../helpers';
 
 import WebServer from '../../../lib/run/server';
 
@@ -58,6 +58,35 @@ describe('WebServer', () => {
       expect(test.running).to.be.true;
       await test.stop();
       expect(test.running).to.be.false;
+    });
+  });
+
+  describe('serving', () => {
+    beforeEach(async () => {
+      await test.start();
+    });
+
+    it('allows serving other routes', async () => {
+      test.serve('/test', (req, res) => res.send('hello'));
+
+      let res = await request(`${test.url}/test`);
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.equal('hello');
+    });
+
+    it('allows serving other files', async () => {
+      test.serve('/test', __filename);
+
+      await expect(request(`${test.url}/test`)).to.eventually
+        .have.property('statusCode', 200);
+    });
+
+    it('allows serving JSON', async () => {
+      test.serve('/test', { test: true });
+
+      let res = await request(`${test.url}/test`);
+      expect(res.statusCode).to.equal(200);
+      expect(res.body).to.equal('{"test":true}');
     });
   });
 });

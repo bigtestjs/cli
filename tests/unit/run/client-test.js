@@ -24,11 +24,4 @@ describe('ClientServer', () => {
     await expect(request(test.url)).to.eventually
       .have.property('statusCode', 200);
   });
-
-  it('allows serving other files', async () => {
-    test.serve('/test', __filename);
-
-    await expect(request(`${test.url}/test`)).to.eventually
-      .have.property('statusCode', 200);
-  });
 });
