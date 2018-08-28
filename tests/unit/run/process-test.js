@@ -2,9 +2,9 @@ import { describe, beforeEach, it } from 'mocha';
 import { WritableStream } from 'memory-streams';
 import { expect, when } from '../helpers';
 
-import Process from '../../../lib/run/process';
+import Process from '@run/process';
 
-describe('Process', () => {
+describe('Unit: Process', () => {
   it('can be created with specific properties', () => {
     let test = new Process({
       name: 'test',

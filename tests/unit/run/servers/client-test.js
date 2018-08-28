@@ -1,10 +1,10 @@
 import { describe, beforeEach, afterEach, it } from 'mocha';
-import { expect, request } from '../helpers';
+import { expect, request } from '../../helpers';
 
-import WebServer from '../../../lib/run/server';
-import ClientServer from '../../../lib/run/client';
+import WebServer from '@run/servers/web';
+import ClientServer from '@run/servers/client';
 
-describe('ClientServer', () => {
+describe('Unit: ClientServer', () => {
   let test;
 
   beforeEach(async () => {
@@ -22,13 +22,6 @@ describe('ClientServer', () => {
 
   it('responds to requests', async () => {
     await expect(request(test.url)).to.eventually
-      .have.property('statusCode', 200);
-  });
-
-  it('allows serving other files', async () => {
-    test.serve('/test', __filename);
-
-    await expect(request(`${test.url}/test`)).to.eventually
       .have.property('statusCode', 200);
   });
 });

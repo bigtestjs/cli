@@ -2,12 +2,12 @@ import { describe, beforeEach, afterEach, it } from 'mocha';
 import { when } from '@bigtest/convergence';
 import WebSocket from 'ws';
 
-import { expect } from '../helpers';
+import { expect } from '../../helpers';
 
-import WebServer from '../../../lib/run/server';
-import SocketServer from '../../../lib/run/sockets';
+import WebServer from '@run/servers/web';
+import SocketServer from '@run/servers/sockets';
 
-describe('SocketServer', () => {
+describe('Unit: SocketServer', () => {
   let test, server;
   let sockets = [];
 
@@ -71,12 +71,26 @@ describe('SocketServer', () => {
   it('emits a namespaced connect event', async () => {
     let connected = false;
 
-    test.on('test/connect', meta => {
+    test.on('test/connect', (meta, id) => {
       expect(meta).to.equal(get(0).meta);
+      expect(id).to.be.undefined;
       connected = true;
     });
 
     await connect('test');
+    expect(connected).to.be.true;
+  });
+
+  it('emits a namespaced connect event with an ID', async () => {
+    let connected = false;
+
+    test.on('test/connect', (meta, id) => {
+      expect(meta).to.equal(get(0).meta);
+      expect(id).to.equal('1234');
+      connected = true;
+    });
+
+    await connect('test/1234');
     expect(connected).to.be.true;
   });
 
