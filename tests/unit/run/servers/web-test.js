@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, it } from 'mocha';
-import { expect, request } from '../../helpers';
+import { expect, request } from '@tests/helpers';
 
 import WebServer from '@run/servers/web';
 

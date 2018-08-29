@@ -1,7 +1,8 @@
 import { pathExists, readFile } from 'fs-extra';
-import { expect, bigtest } from '../helpers';
 import { describe, it, afterEach, beforeEach } from 'mocha';
+import { expect } from '@tests/helpers';
 import cleanupFiles from '@init/utils/clean-up-files';
+import bigtest from '../command';
 
 const CWD = process.cwd();
 

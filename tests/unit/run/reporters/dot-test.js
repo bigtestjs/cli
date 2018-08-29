@@ -1,6 +1,6 @@
 import { describe, beforeEach, it } from 'mocha';
 import { WritableStream } from 'memory-streams';
-import { expect, dedent } from '../../helpers';
+import { expect, dedent } from '@tests/helpers';
 
 import DotReporter from '@run/reporters/dot';
 import create from '@run/state/create';

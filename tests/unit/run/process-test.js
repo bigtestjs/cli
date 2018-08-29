@@ -1,6 +1,6 @@
 import { describe, beforeEach, it } from 'mocha';
 import { WritableStream } from 'memory-streams';
-import { expect, when } from '../helpers';
+import { expect, when } from '@tests/helpers';
 
 import Process from '@run/process';
 

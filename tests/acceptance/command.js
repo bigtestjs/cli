@@ -2,11 +2,8 @@ import path from 'path';
 import { exec } from 'child_process';
 import { WritableStream } from 'memory-streams';
 
-export { expect } from 'chai';
-export * from '../helpers';
-
-export async function bigtest(args) {
-  let bin = path.join(__dirname, 'bin');
+export default async function bigtest(args) {
+  let bin = path.join(__dirname, './bin');
   let stdout = new WritableStream();
   let stderr = new WritableStream();
 

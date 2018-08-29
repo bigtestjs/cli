@@ -1,5 +1,6 @@
 import { describe, it } from 'mocha';
-import { expect, bigtest, dedent } from '../helpers';
+import { expect, dedent } from '@tests/helpers';
+import bigtest from '@tests/acceptance/command';
 
 describe('Acceptance: `bigtest run`', () => {
   it('has help output', async () => {

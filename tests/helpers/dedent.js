@@ -1,4 +1,4 @@
-export function dedent(strings, ...values) {
+export default function dedent(strings, ...values) {
   let raw = typeof strings === 'string' ? [strings] : strings.raw;
   let result = '';
 
