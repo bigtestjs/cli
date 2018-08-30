@@ -1,19 +1,16 @@
-import { expect } from 'chai';
-import { promisify } from 'util';
 import { pathExists, readFile } from 'fs-extra';
-import { execFile } from 'child_process';
+import { expect, bigtest } from '../helpers';
 import { describe, it, afterEach, beforeEach } from 'mocha';
-import cleanupFiles from '../../lib/init/utils/clean-up-files';
+import cleanupFiles from '../../../lib/init/utils/clean-up-files';
 
 const CWD = process.cwd();
-let exec = promisify(execFile);
 
-describe('bigtest init', () => {
-  describe('default init', function() {
+describe('Acceptance: `bigtest init`', () => {
+  describe('bigtest init', () => {
     let result;
 
-    beforeEach(async function() {
-      result = await exec('node', ['./index.js', 'init']);
+    beforeEach(async () => {
+      result = await bigtest('init');
     });
 
     afterEach(async () => {
@@ -21,24 +18,24 @@ describe('bigtest init', () => {
     });
 
     it('outputs the right message to the console', () => {
-      expect(result.stdout).to.equal(
+      expect(result.stdout.toString()).to.equal(
         '\nBigTest has been initialized with @bigtest/react \n\n'
       );
     });
 
-    it('creates a bigtest folder', async function() {
+    it('creates a bigtest folder', async () => {
       let hasBigtestFolder = await pathExists(`${CWD}/bigtest`);
 
       expect(hasBigtestFolder).to.equal(true);
     });
 
-    it('does not create a bigtest network folder', async function() {
+    it('does not create a bigtest network folder', async () => {
       let hasNetworkFolder = await pathExists(`${CWD}/bigtest/network`);
 
       expect(hasNetworkFolder).to.equal(false);
     });
 
-    it('inits with @bigtest/react', async function() {
+    it('inits with @bigtest/react', async () => {
       let helperFile = await readFile(
         `${CWD}/bigtest/helpers/setup-app.js`,
         'utf-8'
@@ -52,11 +49,11 @@ describe('bigtest init', () => {
     });
   });
 
-  describe('bigtest init with network', function() {
+  describe('bigtest init with network', () => {
     let result;
 
-    beforeEach(async function() {
-      result = await exec('node', ['./index.js', 'init', '--network']);
+    beforeEach(async () => {
+      result = await bigtest('init --network');
     });
 
     afterEach(async () => {
@@ -64,18 +61,18 @@ describe('bigtest init', () => {
     });
 
     it('outputs the right message to the console', () => {
-      expect(result.stdout).to.equal(
+      expect(result.stdout.toString()).to.equal(
         '\nBigTest has been initialized with @bigtest/react and @bigtest/mirage\n\n'
       );
     });
 
-    it('creates a bigtest network folder', async function() {
+    it('creates a bigtest network folder', async () => {
       let hasNetworkFolder = await pathExists(`${CWD}/bigtest/network`);
 
       expect(hasNetworkFolder).to.equal(true);
     });
 
-    it('inits @bigtest/react helper with @bigtest/mirage setup', async function() {
+    it('inits @bigtest/react helper with @bigtest/mirage setup', async () => {
       let helperFile = await readFile(
         `${CWD}/bigtest/helpers/setup-app.js`,
         'utf-8'
@@ -90,16 +87,16 @@ describe('bigtest init', () => {
     });
   });
 
-  describe('bigtest init with an existing directory', function() {
+  describe('bigtest init with an existing directory', () => {
     let result;
 
-    beforeEach(async function() {
-      await exec('node', ['./index.js', 'init']);
+    beforeEach(async () => {
+      await bigtest('init');
     });
 
-    describe('without network', function() {
-      beforeEach(async function() {
-        result = await exec('node', ['./index.js', 'init']);
+    describe('without network', () => {
+      beforeEach(async () => {
+        result = await bigtest('init');
       });
 
       afterEach(async () => {
@@ -107,15 +104,15 @@ describe('bigtest init', () => {
       });
 
       it('outputs the right message to the console', () => {
-        expect(result.stdout).to.equal(
+        expect(result.stdout.toString()).to.equal(
           '\nLooks like BigTest is already initialized\n\n'
         );
       });
     });
 
-    describe('with network', function() {
-      beforeEach(async function() {
-        result = await exec('node', ['./index.js', 'init', '--network']);
+    describe('with network', () => {
+      beforeEach(async () => {
+        result = await bigtest('init --network');
       });
 
       afterEach(async () => {
@@ -123,7 +120,7 @@ describe('bigtest init', () => {
       });
 
       it('outputs the right message to the console', () => {
-        expect(result.stdout).to.equal(
+        expect(result.stdout.toString()).to.equal(
           '\n@bigtest/network has been initialized\n\n'
         );
       });
