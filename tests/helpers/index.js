@@ -6,7 +6,7 @@ chai.use(chaiAsPromised);
 export { expect } from 'chai';
 export { when } from '@bigtest/convergence';
 
-export * from '@run/util/network';
+export { default as request } from '@run/util/request';
 
 export { default as defer } from './defer';
 export { default as dedent } from './dedent';
