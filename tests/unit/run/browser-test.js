@@ -1,10 +1,13 @@
 import os from 'os';
 import path from 'path';
+import fs from 'fs-extra';
 import { describe, beforeEach, it } from 'mocha';
-import { expect, readFile, when, defer } from '../helpers';
+import { expect, when, defer } from '../helpers';
 
 import Process from '@run/process';
 import Browser from '@run/browsers/base';
+
+const readFile = file => fs.readFile(file, { encoding: 'utf8' });
 
 describe('Unit: Browsers', () => {
   let test;

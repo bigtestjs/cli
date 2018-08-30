@@ -8,7 +8,6 @@ chai.use(chaiAsPromised);
 export { expect } from 'chai';
 export { when } from '@bigtest/convergence';
 
-export * from '@util/fs';
 export * from '@run/util/network';
 export * from '../helpers';
 
