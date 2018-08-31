@@ -1,10 +1,11 @@
 {
   "name": "@bigtest/cli",
   "description": "Command line interface for testing big",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "dist",
   "files": [
+    "index.js",
     "dist",
     "docs",
     "src"
