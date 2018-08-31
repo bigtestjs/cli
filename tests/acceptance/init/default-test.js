@@ -18,8 +18,8 @@ describe('Acceptance: `bigtest init`', () => {
     });
 
     it('outputs the right message to the console', () => {
-      expect(result.stdout.toString()).to.equal(
-        '\nBigTest has been initialized with @bigtest/react \n\n'
+      expect(result.stdout.toString()).to.include(
+        'BigTest has been initialized with @bigtest/react'
       );
     });
 
@@ -59,8 +59,8 @@ describe('Acceptance: `bigtest init`', () => {
     });
 
     it('outputs the right message to the console', () => {
-      expect(result.stdout.toString()).to.equal(
-        '\nBigTest has been initialized with @bigtest/react and @bigtest/mirage\n\n'
+      expect(result.stdout.toString()).to.include(
+        'BigTest has been initialized with @bigtest/react and @bigtest/mirage'
       );
     });
 
@@ -100,8 +100,8 @@ describe('Acceptance: `bigtest init`', () => {
       });
 
       it('outputs the right message to the console', () => {
-        expect(result.stdout.toString()).to.equal(
-          '\nLooks like BigTest is already initialized\n\n'
+        expect(result.stdout.toString()).to.include(
+          'Looks like BigTest is already initialized'
         );
       });
     });
@@ -116,8 +116,8 @@ describe('Acceptance: `bigtest init`', () => {
       });
 
       it('outputs the right message to the console', () => {
-        expect(result.stdout.toString()).to.equal(
-          '\n@bigtest/network has been initialized\n\n'
+        expect(result.stdout.toString()).to.include(
+          '@bigtest/network has been initialized'
         );
       });
     });
