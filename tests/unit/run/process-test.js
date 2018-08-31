@@ -89,6 +89,11 @@ describe('Unit: Process', () => {
       let test = new Process({ name: 'nope', cmd: 'f4k3' });
       await expect(test.run()).to.be.rejectedWith('command not found for nope');
     });
+
+    it('rejects when the command path does not exist', async () => {
+      let test = new Process({ name: 'path', cmd: 'not/a/real/path' });
+      await expect(test.run()).to.be.rejectedWith('command not found for path');
+    });
   });
 
   describe('kill', () => {
