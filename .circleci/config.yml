@@ -93,11 +93,11 @@ workflows:
       - test:
           requires:
             - install
-      # - deploy:
-      #     requires:
-      #       - lint
-      #       - build
-      #       - test
-      #     filters:
-      #       branches:
-      #         only: master
+      - deploy:
+          requires:
+            - lint
+            - build
+            - test
+          filters:
+            branches:
+              only: master
