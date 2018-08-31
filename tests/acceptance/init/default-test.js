@@ -41,11 +41,9 @@ describe('Acceptance: `bigtest init`', () => {
         'utf-8'
       );
 
-      expect(
-        helperFile.includes(
-          "import { setupAppForTesting } from '@bigtest/react';"
-        )
-      ).to.equal(true);
+      expect(helperFile).to.include(
+        "import { setupAppForTesting } from '@bigtest/react';"
+      );
     });
   });
 
@@ -78,12 +76,10 @@ describe('Acceptance: `bigtest init`', () => {
         'utf-8'
       );
 
-      expect(
-        helperFile.includes(
-          "import { setupAppForTesting } from '@bigtest/react';"
-        )
-      ).to.equal(true);
-      expect(helperFile.includes('server = startMirage();')).to.equal(true);
+      expect(helperFile).to.include(
+        "import { setupAppForTesting } from '@bigtest/react';"
+      );
+      expect(helperFile).to.include('server = startMirage();');
     });
   });
 
