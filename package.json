@@ -13,7 +13,7 @@
     "build": "yarn build:cli && yarn build:assets",
     "build:cli": "babel --out-dir ./dist ./lib --verbose",
     "build:assets": "webpack --config webpack.config.js",
-    "lint": "eslint --ignore-path .gitignore ./",
+    "lint": "eslint ./",
     "postpublish": "bigtest-tag-version",
     "start": "nodemon --watch ./lib --exec 'yarn build'",
     "test": "mocha --opts ./tests/mocha.opts ./tests"
