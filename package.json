@@ -1,14 +1,15 @@
 {
   "name": "@bigtest/cli",
   "description": "Command line interface for testing big",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "dist",
   "files": [
     "index.js",
     "dist",
     "docs",
-    "src"
+    "src",
+    "templates"
   ],
   "scripts": {
     "build": "yarn build:cli && yarn build:assets",
