@@ -10,7 +10,7 @@ describe('Unit: Plugins - Adapter', () => {
   beforeEach(() => {
     test = new AdapterPlugin({
       name: 'test',
-      module: __filename,
+      path: __filename,
       inject: { head: ['foo'], body: ['bar'] },
       foo: 'bar'
     });
@@ -19,7 +19,7 @@ describe('Unit: Plugins - Adapter', () => {
   it('is initialized with provided options', () => {
     expect(test.options).to.deep.equal({
       name: 'test',
-      module: __filename,
+      path: __filename,
       inject: { head: ['foo'], body: ['bar'] },
       foo: 'bar'
     });
@@ -96,8 +96,8 @@ describe('Unit: Plugins - Adapter', () => {
     it('is initialized with default mocha options', () => {
       expect(test.options).to.deep.equal({
         name: 'mocha',
-        module: path.join(__dirname, '../../../../lib/run/adapters/mocha.js'),
-        inject: { head: ['mocha/mocha.js'] }
+        path: path.join(__dirname, '../../../../lib/run/adapters/mocha.js'),
+        inject: { body: [], head: ['mocha/mocha.js'] }
       });
     });
   });

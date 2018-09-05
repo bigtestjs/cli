@@ -13,7 +13,7 @@ describe('Unit: Plugins - Serve', () => {
     server.serve('/', { testing: true });
 
     test = new ServePlugin({
-      command: 'echo "hello world!"',
+      exec: 'echo "hello world!"',
       env: { FOO: 'BAR' },
       url: server.url,
       silent: true
@@ -28,7 +28,7 @@ describe('Unit: Plugins - Serve', () => {
 
   it('is initialized with provided options', () => {
     expect(test.options).to.deep.equal({
-      command: 'echo "hello world!"',
+      exec: 'echo "hello world!"',
       env: { FOO: 'BAR' },
       url: server.url,
       silent: true
@@ -71,7 +71,7 @@ describe('Unit: Plugins - Serve', () => {
   describe('start', () => {
     beforeEach(() => {
       // command with no output so not to pollute process streams
-      test.options.command = 'sleep 0';
+      test.options.exec = 'sleep 0';
       test.options.silent = false;
       // stub proxy with noop target setter
       test.setup(null, { set() {} });
@@ -123,7 +123,7 @@ describe('Unit: Plugins - Serve', () => {
 
   describe('stop', () => {
     beforeEach(async () => {
-      test.options.command = 'sleep 10000';
+      test.options.exec = 'sleep 10000';
       test.setup(null, { set() {} });
       await server.start();
       await test.start();

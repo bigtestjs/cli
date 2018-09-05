@@ -10,26 +10,31 @@ describe('Acceptance: `bigtest run`', () => {
       Usage: bigtest run [options]
 
       Options:
-        --browsers, --browser, -b  One or more browsers to launch  [default: "System Default"]
-        --once                     Run once and exit  [boolean] [default: false]
-        --opts                     Path to options file  [default: "bigtest/bigtest.opts"]
-        --version                  Show version number  [boolean]
-        --help                     Show help  [boolean]
-
-      Serve Options:
-        --serve, --serve.command  App server command  [array]
-        --serve.url               App server URL  [string] [default: "http://localhost:3000"]
-
-      Adapter Options:
-        --adapter, --adapter.name  Adapter name  [array]
+        -b, --browser, --browsers    One or more browsers to launch  [default: "System Default"]
+        -r, --reporter, --reporters  One or more reporters to use  [default: "dot"]
+        -v, --verbose                Show debug logs  [boolean]
+        --plugins                    One or more plugins to use
+        --once                       Run once and exit  [boolean]
+        --opts                       Path to options file  [default: "bigtest/bigtest.opts"]
+        --version                    Show version number  [boolean]
+        --help                       Show help  [boolean]
 
       Client Options:
-        --client.hostname, --client.host  Client server host name  [string] [default: "localhost"]
-        --client.port                     Client server port number  [number] [default: 4567]
+        --client-host  Client server host name  [string] [default: "localhost"]
+        --client-port  Client server port number  [number] [default: 4567]
 
       Proxy Options:
-        --proxy.hostname, --proxy.host  Proxy server host name  [string] [default: "localhost"]
-        --proxy.port                    Proxy server port number  [number] [default: 5678]
+        --proxy-host  Proxy server host name  [string] [default: "localhost"]
+        --proxy-port  Proxy server port number  [number] [default: 5678]
+
+      Serve Options:
+        -s, --serve     App server command  [string]
+        --serve-url     App server URL  [string] [default: "http://localhost:3000"]
+        --serve-silent  Surpress app server output  [boolean] [default: false]
+
+      Adapter Options:
+        -a, --adapter   Adapter name  [string]
+        --adapter-path  Adapter path to serve  [string]
 
     `);
   });
