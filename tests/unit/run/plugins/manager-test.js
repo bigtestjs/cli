@@ -47,6 +47,16 @@ describe('Unit: Plugin - Manager', () => {
     expect(test.plugins[0].options).to.deep.equal({ hello: 'world' });
   });
 
+  it('throws an error when the plugin cannot be found', () => {
+    expect(() => new PluginManager(['test']))
+      .to.throw('Cannot find plugin "test"');
+  });
+
+  it('throws an error when a valid plugin is not provided', () => {
+    expect(() => new PluginManager([class Test {}]))
+      .to.throw('Invalid plugin "Test"');
+  });
+
   it('invokes setup for all plugins', () => {
     let test = new PluginManager([TestPlugin, TestPlugin]);
     test.setup(1, 2, 3, 4);
