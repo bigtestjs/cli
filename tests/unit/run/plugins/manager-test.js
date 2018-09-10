@@ -1,5 +1,5 @@
 import { describe, it } from 'mocha';
-import { expect } from '@tests/helpers';
+import { expect, fake } from '@tests/helpers';
 
 import PluginManager from '@run/plugins';
 import BasePlugin from '@run/plugins/base';
@@ -8,25 +8,9 @@ import ServePlugin from '@run/plugins/serve';
 
 class TestPlugin extends BasePlugin {
   static options = 'test';
-  fail = false;
-  calls = {};
-
-  setup(...args) {
-    this.calls.setup = this.calls.setup || [];
-    this.calls.setup.push(args);
-  }
-
-  async start(...args) {
-    this.calls.start = this.calls.start || [];
-    this.calls.start.push(args);
-    if (this.fail) throw new Error('failed');
-  }
-
-  async stop(...args) {
-    this.calls.stop = this.calls.stop || [];
-    this.calls.stop.push(args);
-    if (this.fail) throw new Error('failed');
-  }
+  setup = fake();
+  start = fake();
+  stop = fake();
 }
 
 describe('Unit: Plugin - Manager', () => {
@@ -38,6 +22,7 @@ describe('Unit: Plugin - Manager', () => {
 
   it('passes nested options defined by a static plugin property', () => {
     let test = new PluginManager(['serve'], { serve: { foo: 'bar' } });
+    expect(test.plugins[0].constructor.options).to.equal('serve');
     expect(test.plugins[0].options).to.deep.equal({ foo: 'bar' });
   });
 
@@ -66,43 +51,45 @@ describe('Unit: Plugin - Manager', () => {
     let test = new PluginManager([TestPlugin, TestPlugin]);
     test.setup(1, 2, 3, 4);
 
-    expect(test.plugins[0].calls.setup[0]).to.deep.equal([1, 2, 3, 4]);
-    expect(test.plugins[1].calls.setup[0]).to.deep.equal([1, 2, 3, 4]);
+    expect(test.plugins[0].setup).to.have.been.calledWith(1, 2, 3, 4);
+    expect(test.plugins[1].setup).to.have.been.calledWith(1, 2, 3, 4);
   });
 
   it('invokes start for all plugins and resolves when done', async () => {
     let test = new PluginManager([TestPlugin, TestPlugin]);
     await expect(test.start()).to.be.fulfilled;
 
-    expect(test.plugins[0].calls.start).to.have.a.lengthOf(1);
-    expect(test.plugins[1].calls.start).to.have.a.lengthOf(1);
+    expect(test.plugins[0].start).to.have.been.calledOnce;
+    expect(test.plugins[1].start).to.have.been.calledOnce;
   });
 
   it('invokes start for all plugins and rejects when one does', async () => {
-    let test = new PluginManager([TestPlugin, TestPlugin]);
+    let test = new PluginManager([TestPlugin, TestPlugin, TestPlugin]);
 
-    test.plugins[0].fail = true;
-    await expect(test.start()).to.be.rejected;
+    test.plugins[1].start = fake.throws('fail');
+    await expect(test.start()).to.be.rejectedWith('fail');
 
-    expect(test.plugins[0].calls.start).to.have.a.lengthOf(1);
-    expect(test.plugins[1].calls.start).to.have.a.lengthOf(1);
+    expect(test.plugins[0].start).to.have.been.calledOnce;
+    expect(test.plugins[1].start).to.have.been.calledOnce;
+    expect(test.plugins[2].start).to.have.not.been.called;
   });
 
   it('invokes stop for all plugins and resolves when done', async () => {
     let test = new PluginManager([TestPlugin, TestPlugin]);
     await expect(test.stop()).to.be.fulfilled;
 
-    expect(test.plugins[0].calls.stop).to.have.a.lengthOf(1);
-    expect(test.plugins[1].calls.stop).to.have.a.lengthOf(1);
+    expect(test.plugins[0].stop).to.have.been.calledOnce;
+    expect(test.plugins[1].stop).to.have.been.calledOnce;
   });
 
   it('invokes stop for all plugins and rejects when one does', async () => {
-    let test = new PluginManager([TestPlugin, TestPlugin]);
+    let test = new PluginManager([TestPlugin, TestPlugin, TestPlugin]);
 
-    test.plugins[1].fail = true;
-    await expect(test.stop()).to.be.rejected;
+    test.plugins[1].stop = fake.throws('fail');
+    await expect(test.stop()).to.be.rejectedWith('fail');
 
-    expect(test.plugins[0].calls.stop).to.have.a.lengthOf(1);
-    expect(test.plugins[1].calls.stop).to.have.a.lengthOf(1);
+    expect(test.plugins[0].stop).to.have.been.calledOnce;
+    expect(test.plugins[1].stop).to.have.been.calledOnce;
+    expect(test.plugins[2].stop).to.have.not.been.called;
   });
 });

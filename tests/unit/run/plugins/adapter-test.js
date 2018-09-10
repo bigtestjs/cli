@@ -1,6 +1,6 @@
 import path from 'path';
 import { describe, beforeEach, it } from 'mocha';
-import { expect } from '@tests/helpers';
+import { expect, fake } from '@tests/helpers';
 
 import AdapterPlugin from '@run/plugins/adapter';
 
@@ -31,21 +31,8 @@ describe('Unit: Plugins - Adapter', () => {
     beforeEach(() => {
       // stub each property the plugin uses
       client = { url: 'testing-url' };
-
-      proxy = {
-        inject(...args) {
-          proxy.injected = proxy.injected || [];
-          proxy.injected.push(args);
-        }
-      };
-
-      sockets = {
-        on(...args) {
-          sockets.events = sockets.events || [];
-          sockets.events.push(args);
-          return sockets;
-        }
-      };
+      proxy = { inject: fake() };
+      sockets = { on: fake(() => sockets) };
 
       // not actually called, only referenced
       store = {
@@ -67,7 +54,7 @@ describe('Unit: Plugins - Adapter', () => {
         client: 'testing-url'
       });
 
-      expect(proxy.injected[0][0]).to.deep.equal({
+      expect(proxy.inject).to.have.been.calledWith({
         head: [
           'foo',
           { script: '/adapter.js', serve: __filename },
@@ -78,13 +65,12 @@ describe('Unit: Plugins - Adapter', () => {
     });
 
     it('adds the correct store listeners to socket API events', () => {
-      expect(sockets.events).to.deep.equal([
-        ['adapter/connect', store.connectBrowser],
-        ['adapter/disconnect', store.disconnectBrowser],
-        ['adapter/start', store.startTests],
-        ['adapter/update', store.updateTests],
-        ['adapter/end', store.endTests]
-      ]);
+      expect(sockets.on).to.have.been
+        .calledWith('adapter/connect', store.connectBrowser)
+        .and.calledWith('adapter/disconnect', store.disconnectBrowser)
+        .and.calledWith('adapter/start', store.startTests)
+        .and.calledWith('adapter/update', store.updateTests)
+        .and.calledWith('adapter/end', store.endTests);
     });
   });
 
