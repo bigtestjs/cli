@@ -22,13 +22,13 @@ entry: isTesting ? glob.sync('tests/*-test.js') : 'src/index.js',
 // point to an index file where you import each test
 ```
 
-2. Tell BigTest how to serve your app (`--serve.url` defaults to
+2. Tell BigTest how to serve your app (`--serve-url` defaults to
 `http://localhost:3000`) and specify an adapter to use (`mocha` is
 currently the only supported adapter).
 ``` bash
 $ bigtest run \
   --serve "yarn webpack-serve" \
-  --serve.url "http://localhost:8080" \
+  --serve-url "http://localhost:8080" \
   --adapter mocha
 ```
 
@@ -38,7 +38,7 @@ by default at `bigtest/bitest.opts`.
 ``` bash
 # bigtest/bigtest.opts
 --serve "yarn webpack-serve"
---serve.url "http://localhost:8080"
+--serve-url "http://localhost:8080"
 --adapter mocha
 ```
 
