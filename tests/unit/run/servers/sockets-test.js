@@ -2,7 +2,7 @@ import { describe, beforeEach, afterEach, it } from 'mocha';
 import { when } from '@bigtest/convergence';
 import WebSocket from 'ws';
 
-import { expect } from '../../helpers';
+import { expect } from '@tests/helpers';
 
 import WebServer from '@run/servers/web';
 import SocketServer from '@run/servers/sockets';

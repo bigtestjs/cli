@@ -2,7 +2,8 @@ import { describe, beforeEach, it } from 'mocha';
 import { WritableStream } from 'memory-streams';
 import chalk from 'chalk';
 
-import { expect, dedent } from '../../helpers';
+import { expect, dedent } from '@tests/helpers';
+
 import Reporter from '@run/reporters/base';
 import State, { create } from '@run/state';
 

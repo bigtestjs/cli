@@ -13,7 +13,8 @@
       "alias": {
         "@init": "./lib/init",
         "@run": "./lib/run",
-        "@util": "./lib/util"
+        "@util": "./lib/util",
+        "@tests": "./tests"
       }
     }]
   ],

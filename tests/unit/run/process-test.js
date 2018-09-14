@@ -1,6 +1,6 @@
 import { describe, beforeEach, it } from 'mocha';
 import { WritableStream } from 'memory-streams';
-import { expect, when } from '../helpers';
+import { expect, when } from '@tests/helpers';
 
 import Process from '@run/process';
 
@@ -82,17 +82,17 @@ describe('Unit: Process', () => {
 
     it('rejects when the command exits with a non-zero code', async () => {
       let test = new Process({ cmd: 'printf', args: ['%'] });
-      await expect(test.run()).to.be.rejectedWith('printf failed with exit code 1');
+      await expect(test.run()).to.be.rejectedWith('Command failed with exit code 1.');
     });
 
     it('rejects when the command does not exist', async () => {
       let test = new Process({ name: 'nope', cmd: 'f4k3' });
-      await expect(test.run()).to.be.rejectedWith('command not found for nope');
+      await expect(test.run()).to.be.rejectedWith('Command not found.');
     });
 
     it('rejects when the command path does not exist', async () => {
       let test = new Process({ name: 'path', cmd: 'not/a/real/path' });
-      await expect(test.run()).to.be.rejectedWith('command not found for path');
+      await expect(test.run()).to.be.rejectedWith('Command not found.');
     });
   });
 
@@ -136,89 +136,93 @@ describe('Unit: Process', () => {
   });
 
   describe('pipe', () => {
-    let stdout, stderr;
+    let streams;
 
     beforeEach(() => {
-      stdout = new WritableStream();
-      stderr = new WritableStream();
+      streams = {
+        stdout: new WritableStream(),
+        stderr: new WritableStream()
+      };
     });
 
     it('adds a new line to stdout before any piped output', async () => {
       let test = new Process({ cmd: 'printf', args: ['test'] });
 
       let done = test.run();
-      test.pipe({ stdout, stderr });
+      test.pipe(streams);
       await expect(done).to.be.fulfilled;
 
-      expect(stdout.toString()).to.equal('\ntest');
-      expect(stderr.toString()).to.equal('');
+      expect(streams.stdout.toString()).to.equal('\ntest');
+      expect(streams.stderr.toString()).to.equal('');
     });
 
     it('adds a new line to stderr before any piped output', async () => {
       let test = new Process({ cmd: 'printf', args: ['%'] });
 
       let done = test.run();
-      test.pipe({ stdout, stderr });
+      test.pipe(streams);
       await expect(done).to.be.rejected;
 
-      expect(stdout.toString()).to.equal('');
-      expect(stderr.toString()).to.match(/^\n/);
+      expect(streams.stdout.toString()).to.equal('');
+      expect(streams.stderr.toString()).to.match(/^\n/);
     });
 
     it('does not add a new line if there was no output', async () => {
       let test = new Process({ cmd: 'node', args: ['--eval', ''] });
 
       let done = test.run();
-      test.pipe({ stdout, stderr });
+      test.pipe(streams);
       await expect(done).to.be.fulfilled;
 
-      expect(stdout.toString()).to.equal('');
-      expect(stderr.toString()).to.equal('');
+      expect(streams.stdout.toString()).to.equal('');
+      expect(streams.stderr.toString()).to.equal('');
     });
   });
 
   describe('unpipe', () => {
-    let stdout, stderr;
+    let streams;
 
     beforeEach(() => {
-      stdout = new WritableStream();
-      stderr = new WritableStream();
+      streams = {
+        stdout: new WritableStream(),
+        stderr: new WritableStream()
+      };
     });
 
     it('adds a new line to stdout after any piped output', async () => {
       let test = new Process({ cmd: 'printf', args: ['test'] });
 
       let done = test.run();
-      test.pipe({ stdout, stderr });
+      test.pipe(streams);
       await expect(done).to.be.fulfilled;
-      test.unpipe({ stdout, stderr });
+      test.unpipe(streams);
 
-      expect(stdout.toString()).to.equal('\ntest\n');
-      expect(stderr.toString()).to.equal('');
+      expect(streams.stdout.toString()).to.equal('\ntest\n');
+      expect(streams.stderr.toString()).to.equal('');
     });
 
     it('adds a new line to stderr after any piped output', async () => {
       let test = new Process({ cmd: 'printf', args: ['%'] });
 
       let done = test.run();
-      test.pipe({ stdout, stderr });
+      test.pipe(streams);
       await expect(done).to.be.rejected;
-      test.unpipe({ stdout, stderr });
+      test.unpipe(streams);
 
-      expect(stdout.toString()).to.equal('');
-      expect(stderr.toString()).to.match(/\n\n$/); // printf error ends in a newline
+      expect(streams.stdout.toString()).to.equal('');
+      expect(streams.stderr.toString()).to.match(/\n\n$/); // printf error ends in a newline
     });
 
     it('does not add a new line if there was no output', async () => {
       let test = new Process({ cmd: 'node', args: ['--eval', ''] });
 
       let done = test.run();
-      test.pipe({ stdout, stderr });
+      test.pipe(streams);
       await expect(done).to.be.fulfilled;
-      test.unpipe({ stdout, stderr });
+      test.unpipe(streams);
 
-      expect(stdout.toString()).to.equal('');
-      expect(stderr.toString()).to.equal('');
+      expect(streams.stdout.toString()).to.equal('');
+      expect(streams.stderr.toString()).to.equal('');
     });
   });
 });

@@ -1,5 +1,5 @@
 import { describe, beforeEach, it } from 'mocha';
-import { expect } from '../../helpers';
+import { expect } from '@tests/helpers';
 
 import create from '@run/state/create';
 import Browser, {
