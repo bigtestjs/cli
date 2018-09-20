@@ -75,20 +75,38 @@ describe('Unit: Browsers', () => {
       };
 
       // do not wait for launch (it will hang)
-      test.launch();
+      let launch = test.launch();
 
-      // passes when setup is called but before a process is started
-      await when(() => {
-        expect(deferred).to.be.an('object');
-        expect(test.process).to.be.undefined;
-      });
+      // wait for setup to be called
+      await when(() => expect(deferred).to.not.be.undefined);
+      expect(test.running).to.be.false;
 
-      // resolve setup
+      // resolve and start running
       deferred.resolve();
+      await expect(launch).to.be.fulfilled;
+      expect(test.running).to.be.true;
+    });
 
-      await when(() => {
-        expect(test.running).to.be.true;
-      });
+    it('rejects if the `setup` method rejects', async () => {
+      let deferred;
+
+      // defer setup for testing
+      test.setup = async () => {
+        deferred = defer();
+        return deferred;
+      };
+
+      // do not wait for launch (it will hang)
+      let launch = test.launch();
+
+      // wait for setup to be called
+      await when(() => expect(deferred).to.not.be.undefined);
+      expect(test.running).to.be.false;
+
+      // rejected should not run
+      deferred.reject('test');
+      await expect(launch).to.be.rejectedWith('test');
+      expect(test.running).to.be.false;
     });
 
     it('cleans up it\'s own tmp directory before calling `setup`', async () => {
