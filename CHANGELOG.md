@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [0.2.1] - 2018-09-14
+
 ### Changed
 
 - `client-host` and `proxy-host` to `client-hostname` and
