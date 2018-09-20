@@ -20,12 +20,12 @@ describe('Acceptance: `bigtest run`', () => {
         --help                       Show help  [boolean]
 
       Client Options:
-        --client-host  Client server host name  [string] [default: "localhost"]
-        --client-port  Client server port number  [number] [default: 4567]
+        --client-hostname  Client server host name  [string] [default: "localhost"]
+        --client-port      Client server port number  [number] [default: 4567]
 
       Proxy Options:
-        --proxy-host  Proxy server host name  [string] [default: "localhost"]
-        --proxy-port  Proxy server port number  [number] [default: 5678]
+        --proxy-hostname  Proxy server host name  [string] [default: "localhost"]
+        --proxy-port      Proxy server port number  [number] [default: 5678]
 
       Serve Options:
         -s, --serve     App server command  [string]
