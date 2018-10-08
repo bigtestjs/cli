@@ -5,7 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+### Changed
+
+- the `--serve` plugin now automatically sets `NODE_ENV` environment variable to "test" instead of "testing"
+
 ## [0.2.2] - 2018-09-26
+
+### Fixed
 
 - fixed `bigtest.opts` init template to use dash-cased options instead
   of dot notation. See [#20](https://github.com/bigtestjs/cli/pull/20) for more.

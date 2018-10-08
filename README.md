@@ -11,8 +11,8 @@ _Under **heavy** development_
 
 1. Change your bundler's entry to point to your tests
 ``` javascript
-// `bigtest run` sets NODE_ENV to "testing" automatically
-let isTesting = process.env.NODE_ENV === 'testing'
+// `bigtest run` sets NODE_ENV to "test" automatically
+let isTesting = process.env.NODE_ENV === 'test'
 
 // if your bundler supports multiple entry points, you can include all
 // of your tests using a glob pattern (see node-glob)
