@@ -62,7 +62,7 @@ describe('Unit: Plugins - Serve', () => {
     it('initializes a child process with provided env vars plus defaults', () => {
       expect(test.serve.env).to.deep.equal({
         FORCE_COLOR: true,
-        NODE_ENV: 'testing',
+        NODE_ENV: 'test',
         FOO: 'BAR'
       });
     });
